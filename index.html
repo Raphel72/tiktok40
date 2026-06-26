@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>TikTok pour les personnes de plus de 40 ans</title>
+    <link href="manifest.json" rel="manifest"/>
+    <link href="logo.png" rel="apple-touch-icon"/>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&amp;display=swap" rel="stylesheet"/>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .video-container {
+            scroll-snap-type: y mandatory;
+            overflow-y: scroll;
+            height: 100vh;
+        }
+        .video-card {
+            scroll-snap-align: start;
+            height: 100vh;
+        }
+        .video-container::-webkit-scrollbar {
+            display: none;
+        }
+        /* Animation fluide pour l'ouverture du tiroir de commentaires */
+        .drawer-transition {
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        /* Style d'animation pour le placeholder de vidéo en attente */
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 0.6; transform: scale(1); }
+            50% { opacity: 0.9; transform: scale(1.02); }
+        }
+        .pulse-element {
+            animation: pulse-glow 3s infinite ease-in-out;
+        }
+        /* Effet de battement de coeur pour les likes */
+        @keyframes heart-pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+        .like-active {
+            animation: heart-pop 0.3s ease-in-out;
+            color: #ef4444 !important;
+            fill: #ef4444 !important;
+        }
+        /* Animation pour l'apparition des nouveaux commentaires */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.25s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="bg-zinc-950 text-white flex justify-center overflow-hidden select-none">
+<div class="video-container w-full max-w-md bg-zinc-900 relative border-x border-zinc-800 shadow-2xl">
+
+<div class="video-card relative w-full flex items-center justify-center bg-black cursor-pointer" data-id="v1">
+    <iframe class="w-full h-full object-cover" src="https://www.youtube.com/embed/otbYb5hfL84?autoplay=1&mute=1&loop=1&playlist=otbYb5hfL84&controls=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    <div class="absolute bottom-5 left-5 right-20 z-10 bg-black/60 p-4 rounded-xl backdrop-blur-sm border border-white/10 shadow-lg pointer-events-auto">
+        <h3 class="font-bold text-base mt-1 text-red-400">@El_bogossito</h3>
+        <p class="text-xs mt-1 text-gray-200">!!! Vidéo prévention pour les boomers !!! #securite #internet</p>
+    </div>
+</div>
+
+<div class="video-card relative w-full flex items-center justify-center bg-black cursor-pointer" data-id="v2">
+    <iframe class="w-full h-full object-cover" src="https://www.youtube.com/embed/GHcSrlnjAjQ?autoplay=0&mute=1&loop=1&playlist=GHcSrlnjAjQ&controls=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    <div class="absolute bottom-5 left-5 right-20 z-10 bg-black/60 p-4 rounded-xl backdrop-blur-sm border border-white/10 shadow-lg">
+        <h3 class="font-bold text-base mt-1 text-red-400">@Presentation_2</h3>
+        <p class="text-xs mt-1 text-gray-200">Deuxième partie de la présentation #tuto #explications</p>
+    </div>
+</div>
+
+<div class="video-card relative w-full flex items-center justify-center bg-black cursor-pointer" data-id="v3">
+    <iframe class="w-full h-full object-cover" src="https://www.youtube.com/embed/YGYsDQ769UQ?autoplay=0&mute=1&loop=1&playlist=YGYsDQ769UQ&controls=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    <div class="absolute bottom-5 left-5 right-20 z-10 bg-black/60 p-4 rounded-xl backdrop-blur-sm border border-white/10 shadow-lg">
+        <h3 class="font-bold text-base mt-1 text-red-400">@Prévention_canicule.com</h3>
+        <p class="text-xs mt-1 text-gray-200">Tous en mode fraicheur pour lutter contre la canicule !!! #gros #glaçon #tête</p>
+    </div>
+</div>
+
+<div class="video-card relative w-full flex items-center justify-center bg-black cursor-pointer" data-id="v4">
+    <iframe class="w-full h-full object-cover" src="https://www.youtube.com/embed/MwTSolE06CQ?autoplay=0&mute=1&loop=1&playlist=MwTSolE06CQ&controls=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    <div class="absolute bottom-5 left-5 right-20 z-10 bg-black/60 p-4 rounded-xl backdrop-blur-sm border border-white/10 shadow-lg">
+        <h3 class="font-bold text-base mt-1 text-red-400">@salom_la_blg</h3>
+        <p class="text-xs mt-1 text-gray-200">Petit edit en détente #blg #lifestyle</p>
+    </div>
+</div>
+
+<div class="video-card relative w-full flex items-center justify-center bg-black cursor-pointer" data-id="v5">
+    <iframe class="w-full h-full object-cover" src="https://www.youtube.com/embed/3TW6v8LeHlk?autoplay=0&mute=1&loop=1&playlist=3TW6v8LeHlk&controls=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    <div class="absolute bottom-5 left-5 right-20 z-10 bg-black/60 p-4 rounded-xl backdrop-blur-sm border border-white/10 shadow-lg">
+        <h3 class="font-bold text-base mt-1 text-red-400">@michou_en_sueur</h3>
+        <p class="text-xs mt-1 text-gray-200">On a perdu notre chien Yuki ! #recherche #chien #michou</p>
+    </div>
+</div>
+
+<div class="video-card relative w-full flex items-center justify-center bg-black cursor-pointer" data-id="v6">
+    <iframe class="w-full h-full object-cover" src="https://www.youtube.com/embed/o4kTjs0ebLE?autoplay=0&mute=1&loop=1&playlist=o4kTjs0ebLE&controls=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    <div class="absolute bottom-5 left-5 right-20 z-10 bg-black/60 p-4 rounded-xl backdrop-blur-sm border border-white/10 shadow-lg">
+        <h3 class="font-bold text-base mt-1 text-red-400">@Gourmet_Style</h3>
+        <p class="text-xs mt-1 text-gray-200">Le wrap parfait à tester ce soir ! 🌯 #food #recipe</p>
+    </div>
+</div>
+
+<div class="video-card relative w-full flex items-center justify-center bg-black cursor-pointer" data-id="v5_bis">
+    <iframe class="w-full h-full object-cover" src="https://www.youtube.com/embed/5vsy9VQC96c?autoplay=0&mute=1&loop=1&playlist=5vsy9VQC96c&controls=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    <div class="absolute bottom-5 left-5 right-20 z-10 bg-black/60 p-4 rounded-xl backdrop-blur-sm border border-white/10 shadow-lg">
+        <h3 class="font-bold text-base mt-1 text-red-400">@raphadobrazil</h3>
+        <p class="text-xs mt-1 text-gray-200">#bg #brazil #vibes #sucotabaR</p>
+    </div>
+</div>
+
+<div class="video-card relative w-full flex items-center justify-center bg-black cursor-pointer" data-id="v6_bis">
+    <iframe class="w-full h-full object-cover" src="https://www.youtube.com/embed/_X8G4Yu_ajc?autoplay=0&mute=1&loop=1&playlist=_X8G4Yu_ajc&controls=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    <div class="absolute bottom-5 left-5 right-20 z-10 bg-black/60 p-4 rounded-xl backdrop-blur-sm border border-white/10 shadow-lg">
+        <h3 class="font-bold text-base mt-1 text-red-400">@arthur_expert_40</h3>
+        <p class="text-xs mt-1 text-gray-200">La danse du seigneur #tuto #plusde40ans #danse</p>
+    </div>
+</div>
+
+<div class="video-card relative w-full flex items-center justify-center bg-black cursor-pointer" data-id="v7">
+    <iframe class="w-full h-full object-cover" src="https://www.youtube.com/embed/UVwbjsOLTLY?autoplay=0&mute=1&loop=1&playlist=UVwbjsOLTLY&controls=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    <div class="absolute bottom-5 left-5 right-20 z-10 bg-black/60 p-4 rounded-xl backdrop-blur-sm border border-white/10 shadow-lg">
+        <h3 class="font-bold text-base mt-1 text-red-400">@Prank_Master</h3>
+        <p class="text-xs mt-1 text-gray-200">J'ai eu la peur de ma vie 😂😭 #prank #humour</p>
+    </div>
+</div>
+
+<div class="video-card relative w-full flex items-center justify-center bg-black cursor-pointer" data-id="v8">
+    <iframe class="w-full h-full object-cover" src="https://www.youtube.com/embed/3VTBSREsOps?autoplay=0&mute=1&loop=1&playlist=3VTBSREsOps&controls=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    <div class="absolute bottom-5 left-5 right-20 z-10 bg-black/60 p-4 rounded-xl backdrop-blur-sm border border-white/10 shadow-lg">
+        <h3 class="font-bold text-base mt-1 text-red-400">@mimsdobrazil</h3>
+        <p class="text-xs mt-1 text-gray-200">Par pitié envoyez vos numéros en DM #bogoss #charolife</p>
+    </div>
+</div>
+
+<div class="video-card relative w-full flex items-center justify-center bg-black cursor-pointer" data-id="v9">
+    <iframe class="w-full h-full object-cover" src="https://www.youtube.com/embed/rAdcZWFajJc?autoplay=0&mute=1&loop=1&playlist=rAdcZWFajJc&controls=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    <div class="absolute bottom-5 left-5 right-20 z-10 bg-black/60 p-4 rounded-xl backdrop-blur-sm border border-white/10 shadow-lg">
+        <h3 class="font-bold text-base mt-1 text-red-400">@Fashion_Addict</h3>
+        <p class="text-xs mt-1 text-gray-200">Qu'est-ce qu'il y a dans mon sac ? 👜 #unboxing #fashion</p>
+    </div>
+</div>
+
+<div class="video-card relative w-full flex items-center justify-center bg-black cursor-pointer" data-id="v10">
+    <iframe class="w-full h-full object-cover" src="https://www.youtube.com/embed/vdwbVnq9zng?autoplay=0&mute=1&loop=1&playlist=vdwbVnq9zng&controls=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    <div class="absolute bottom-5 left-5 right-20 z-10 bg-black/60 p-4 rounded-xl backdrop-blur-sm border border-white/10 shadow-lg">
+        <h3 class="font-bold text-base mt-1 text-red-400">@Repost_famous_ad</h3>
+        <p class="text-xs mt-1 text-gray-200">Nike's Lebron Ad #Nike #Pool #LebronJames</p>
+    </div>
+</div>
+
+<div class="video-card relative w-full flex items-center justify-center bg-black cursor-pointer" data-id="v11">
+    <iframe class="w-full h-full object-cover" src="https://www.youtube.com/embed/o8HGJt2Btb8?autoplay=0&mute=1&loop=1&playlist=o8HGJt2Btb8&controls=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    <div class="absolute bottom-5 left-5 right-20 z-10 bg-black/60 p-4 rounded-xl backdrop-blur-sm border border-white/10 shadow-lg">
+        <h3 class="font-bold text-base mt-1 text-red-400">@Tuto_Sécurité</h3>
+        <p class="text-xs mt-1 text-gray-200">Comment débloquer ce cadenas sans clé ? 🔐 #astuce #diy</p>
+    </div>
+</div>
+
+<div class="video-card relative w-full flex items-center justify-center bg-black cursor-pointer" data-id="v12">
+    <iframe class="w-full h-full object-cover" src="https://www.youtube.com/embed/EO4ybaO51oo?autoplay=0&mute=1&loop=1&playlist=EO4ybaO51oo&controls=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    <div class="absolute bottom-5 left-5 right-20 z-10 bg-black/60 p-4 rounded-xl backdrop-blur-sm border border-white/10 shadow-lg">
+        <h3 class="font-bold text-base mt-1 text-red-400">@Chalala_Vibes</h3>
+        <p class="text-xs mt-1 text-gray-200">Ambiance Chalala 🌟 #trend #music</p>
+    </div>
+</div>
+
+<div class="video-card relative w-full flex items-center justify-center bg-black cursor-pointer" data-id="v13">
+    <iframe class="w-full h-full object-cover" src="https://www.youtube.com/embed/jIPLdZ7iYkE?autoplay=0&mute=1&loop=1&playlist=jIPLdZ7iYkE&controls=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    <div class="absolute bottom-5 left-5 right-20 z-10 bg-black/60 p-4 rounded-xl backdrop-blur-sm border border-white/10 shadow-lg">
+        <h3 class="font-bold text-base mt-1 text-red-400">@Travel_Vibes</h3>
+        <p class="text-xs mt-1 text-gray-200">C'est le moment de partir ! ✈️ #evasion #trip</p>
+    </div>
+</div>
+
+<div class="video-card relative w-full flex items-center justify-center bg-black cursor-pointer" data-id="v14">
+    <iframe class="w-full h-full object-cover" src="https://www.youtube.com/embed/a2V-h-P-vjc?autoplay=0&mute=1&loop=1&playlist=a2V-h-P-vjc&controls=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    <div class="absolute bottom-5 left-5 right-20 z-10 bg-black/60 p-4 rounded-xl backdrop-blur-sm border border-white/10 shadow-lg">
+        <h3 class="font-bold text-base mt-1 text-red-400">@Sweet_Tooth</h3>
+        <p class="text-xs mt-1 text-gray-200">Le test du bonbon géant ! 🍬 #food #challenge</p>
+    </div>
+</div>
+
+<div class="video-card relative w-full flex items-center justify-center bg-black cursor-pointer" data-id="v15">
+    <iframe class="w-full h-full object-cover" src="https://www.youtube.com/embed/MBj8XM_rytQ?autoplay=0&mute=1&loop=1&playlist=MBj8XM_rytQ&controls=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    <div class="absolute bottom-5 left-5 right-20 z-10 bg-black/60 p-4 rounded-xl backdrop-blur-sm border border-white/10 shadow-lg">
+        <h3 class="font-bold text-base mt-1 text-red-400">@IonFloor</h3>
+        <p class="text-xs mt-1 text-gray-200">Incroyable effet au sol ⚡ #tech #design</p>
+    </div>
+</div>
+
+<div class="video-card relative w-full flex items-center justify-center bg-black cursor-pointer" data-id="v16">
+    <iframe class="w-full h-full object-cover" src="https://www.youtube.com/embed/Tib8IATBQ0Q?autoplay=0&mute=1&loop=1&playlist=Tib8IATBQ0Q&controls=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    <div class="absolute bottom-5 left-5 right-20 z-10 bg-black/60 p-4 rounded-xl backdrop-blur-sm border border-white/10 shadow-lg">
+        <h3 class="font-bold text-base mt-1 text-red-400">@mims_le_fou</h3>
+        <p class="text-xs mt-1 text-gray-200">Look at my neck plz ! I need a massage... #fatigue #detente</p>
+    </div>
+</div>
+
+<div class="video-card relative w-full flex items-center justify-center bg-black cursor-pointer" data-id="v17">
+    <iframe class="w-full h-full object-cover" src="https://www.youtube.com/embed/ed6wvwzj6Qs?autoplay=0&mute=1&loop=1&playlist=ed6wvwzj6Qs&controls=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    <div class="absolute bottom-5 left-5 right-20 z-10 bg-black/60 p-4 rounded-xl backdrop-blur-sm border border-white/10 shadow-lg">
+        <h3 class="font-bold text-base mt-1 text-red-400">@Dance_Seigneur</h3>
+        <p class="text-xs mt-1 text-gray-200">La variante de la danse du seigneur 🕺 #dance #fun</p>
+    </div>
+</div>
+
+<div class="video-card relative w-full flex items-center justify-center bg-black cursor-pointer" data-id="v18">
+    <iframe class="w-full h-full object-cover" src="https://www.youtube.com/embed/9hPpOhf7rqs?autoplay=0&mute=1&loop=1&playlist=9hPpOhf7rqs&controls=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    <div class="absolute bottom-5 left-5 right-20 z-10 bg-black/60 p-4 rounded-xl backdrop-blur-sm border border-white/10 shadow-lg">
+        <h3 class="font-bold text-base mt-1 text-red-400">@Travel_Vibes</h3>
+        <p class="text-xs mt-1 text-gray-200">Partir loin d'ici... Partie 2 🌊 #sunset #holidays</p>
+    </div>
+</div>
+
+<div class="video-card relative w-full flex items-center justify-center bg-black cursor-pointer" data-id="v19">
+    <iframe class="w-full h-full object-cover" src="https://www.youtube.com/embed/L1hWy0J_WAU?autoplay=0&mute=1&loop=1&playlist=L1hWy0J_WAU&controls=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    <div class="absolute bottom-5 left-5 right-20 z-10 bg-black/60 p-4 rounded-xl backdrop-blur-sm border border-white/10 shadow-lg">
+        <h3 class="font-bold text-base mt-1 text-red-400">@Cash_Flow</h3>
+        <p class="text-xs mt-1 text-gray-200">La pluie de billets 💸 #money #dream</p>
+    </div>
+</div>
+
+<div class="video-card relative w-full flex items-center justify-center bg-black cursor-pointer" data-id="v20">
+    <iframe class="w-full h-full object-cover" src="https://www.youtube.com/embed/Ln74ZGQI0Zc?autoplay=0&mute=1&loop=1&playlist=Ln74ZGQI0Zc&controls=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    <div class="absolute bottom-5 left-5 right-20 z-10 bg-black/60 p-4 rounded-xl backdrop-blur-sm border border-white/10 shadow-lg">
+        <h3 class="font-bold text-base mt-1 text-red-400">@les_blg_du_44_72</h3>
+        <p class="text-xs mt-1 text-gray-200">Que des badies à ma table svp #badies #slay #soirée</p>
+    </div>
+</div>
+
+<div class="video-card relative w-full flex items-center justify-center bg-black cursor-pointer" data-id="v21">
+    <iframe class="w-full h-full object-cover" src="https://www.youtube.com/embed/6ht7bTMG8k8?autoplay=0&mute=1&loop=1&playlist=6ht7bTMG8k8&controls=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    <div class="absolute bottom-5 left-5 right-20 z-10 bg-black/60 p-4 rounded-xl backdrop-blur-sm border border-white/10 shadow-lg">
+        <h3 class="font-bold text-base mt-1 text-red-400">@Fête_Foraine_Style</h3>
+        <p class="text-xs mt-1 text-gray-200">Ambiance fête foraine au max 🎡 #vlog #fun</p>
+    </div>
+</div>
+
+<div class="video-card relative w-full flex items-center justify-center bg-black cursor-pointer" data-id="v22">
+    <iframe class="w-full h-full object-cover" src="https://www.youtube.com/embed/VmlyP6YHIbQ?autoplay=0&mute=1&loop=1&playlist=VmlyP6YHIbQ&controls=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    <div class="absolute bottom-5 left-5 right-20 z-10 bg-black/60 p-4 rounded-xl backdrop-blur-sm border border-white/10 shadow-lg">
+        <h3 class="font-bold text-base mt-1 text-red-400">@Prom_Ball</h3>
+        <p class="text-xs mt-1 text-gray-200">Le grand soir du bal de promo 👑 #prom #party</p>
+    </div>
+</div>
+
+<div class="video-card relative w-full flex items-center justify-center bg-black cursor-pointer" data-id="v23">
+    <iframe class="w-full h-full object-cover" src="https://www.youtube.com/embed/SW1_7cgIP8g?autoplay=0&mute=1&loop=1&playlist=SW1_7cgIP8g&controls=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    <div class="absolute bottom-5 left-5 right-20 z-10 bg-black/60 p-4 rounded-xl backdrop-blur-sm border border-white/10 shadow-lg">
+        <h3 class="font-bold text-base mt-1 text-red-400">@Six_Seven</h3>
+        <p class="text-xs mt-1 text-gray-200">Le move ultime 6-7 #dance #challenge</p>
+    </div>
+</div>
+
+
+<div class="absolute bottom-0 left-0 right-0 h-[60vh] bg-zinc-900 rounded-t-2xl border-t border-zinc-800 z-40 transform translate-y-full drawer-transition flex flex-col shadow-2xl" id="comment-drawer">
+<div class="w-full flex justify-center py-2.5 cursor-pointer" onclick="closeComments()">
+<div class="w-12 h-1.5 bg-zinc-700 rounded-full"></div>
+</div>
+<div class="flex justify-between items-center px-4 pb-3 border-b border-zinc-800">
+<span class="font-bold text-sm tracking-wide text-zinc-200" id="drawer-title">Commentaires</span>
+<button class="text-zinc-400 hover:text-white text-lg p-1 bg-zinc-800 rounded-full w-7 h-7 flex items-center justify-center" onclick="closeComments()">
+                    ×
+                </button>
+</div>
+<div class="flex-1 overflow-y-auto p-4 space-y-3.5 text-sm" id="drawer-comments-list">
+</div>
+<div class="hidden text-xs text-red-500 bg-red-500/10 border-t border-red-500/20 px-4 py-2 font-semibold text-center shrink-0" id="drawer-error-msg"></div>
+<div class="p-3 border-t border-zinc-800 bg-zinc-900/90 flex flex-col gap-2 shrink-0">
+<div class="flex gap-2 items-center">
+<label class="text-[10px] text-zinc-400 font-bold uppercase tracking-wider shrink-0 w-16" for="drawer-pseudo-input">Pseudo * :</label>
+<input class="flex-1 bg-zinc-800/80 text-white rounded-lg px-3 py-1.5 text-xs outline-none border border-zinc-700/50 focus:border-red-500/80 transition-colors" id="drawer-pseudo-input" placeholder="Votre prénom / surnom (Ex: Jean56)..." type="text"/>
+</div>
+<div class="flex gap-2 items-center">
+<input class="flex-1 bg-zinc-800 text-white rounded-full px-4 py-2 text-xs outline-none border border-zinc-700/60 focus:border-red-500 transition-colors" id="drawer-comment-input" placeholder="Ajouter un commentaire public..." type="text"/>
+<button class="bg-red-600 hover:bg-red-700 text-white font-bold text-xs px-4 py-2 rounded-full transition-colors shrink-0" onclick="submitComment(event)">Envoyer</button>
+</div>
+</div>
+</div>
+<div class="absolute top-6 left-1/2 transform -translate-x-1/2 bg-zinc-800/90 border border-zinc-700/80 px-4 py-2.5 rounded-full text-xs text-center font-semibold text-white pointer-events-none opacity-0 transition-opacity duration-300 z-50 flex items-center gap-2 backdrop-blur-sm shadow-lg" id="share-toast">
+<svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
+</svg>
+<span>Lien copié dans le presse-papiers !</span>
+</div>
+</div>
+<script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, increment, collection, onSnapshot, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const iframes = document.querySelectorAll('iframe');
+        const observerOptions = {
+            root: document.querySelector('.video-container'),
+            rootMargin: '0px',
+            threshold: 0.6
+        };
+
+        let activeVideoId = null;
+
+        // Configuration dynamique de Firebase
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'tiktok-plus-40';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : undefined;
+
+        let db = null;
+        let auth = null;
+        let isFirebaseActive = false;
+        let globalComments = [];
+        let globalLikes = {};
+
+        // Utilisation de PostMessage API pour piloter les iFrames YouTube
+        function controlYouTube(iframe, action) {
+            if (!iframe.src.includes('enablejsapi=1')) {
+                // On s'assure que l'API JS de YouTube est bien active
+                if (!iframe.src.includes('?')) {
+                    iframe.src += '?enablejsapi=1';
+                } else if (!iframe.src.includes('enablejsapi=1')) {
+                    iframe.src += '&enablejsapi=1';
+                }
+            }
+            const command = action === 'play' ? 'playVideo' : 'pauseVideo';
+            iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: command, args: [] }), '*');
+            
+            if (action === 'play') {
+                // Tenter d'unmuter si possible via postMessage (dépend de la politique du navigateur)
+                iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'unMute', args: [] }), '*');
+            }
+        }
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                const iframe = entry.target;
+                if (entry.isIntersecting) {
+                    controlYouTube(iframe, 'play');
+                } else {
+                    controlYouTube(iframe, 'pause');
+                }
+            });
+        }, observerOptions);
+
+        iframes.forEach(iframe => {
+            observer.observe(iframe);
+        });
+
+        async function initFirebase() {
+            if (!firebaseConfig) {
+                console.log("Firebase non configuré, mode local actif.");
+                return;
+            }
+
+            try {
+                const app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+
+                let userCredential;
+                if (initialAuthToken) {
+                    userCredential = await signInWithCustomToken(auth, initialAuthToken);
+                } else {
+                    userCredential = await signInAnonymously(auth);
+                }
+
+                if (userCredential && userCredential.user) {
+                    isFirebaseActive = true;
+                    console.log("Connecté de manière anonyme à la base de données.");
+                    setupFirestoreListeners();
+                }
+            } catch (err) {
+                console.error("Erreur d'initialisation Firebase :", err);
+            }
+        }
+
+        function setupFirestoreListeners() {
+            const likesCol = collection(db, 'artifacts', appId, 'public', 'data', 'likes');
+            onSnapshot(likesCol, (snapshot) => {
+                snapshot.forEach((doc) => {
+                    const videoId = doc.id;
+                    const data = doc.data();
+                    const count = data.count || 0;
+                    globalLikes[videoId] = count;
+                    
+                    const el = document.getElementById(`like-count-${videoId}`);
+                    if (el) el.innerText = count;
+                });
+            }, (err) => {
+                console.error("Erreur de synchronisation des likes :", err);
+            });
+
+            const commentsCol = collection(db, 'artifacts', appId, 'public', 'data', 'comments');
+            onSnapshot(commentsCol, (snapshot) => {
+                globalComments = [];
+                snapshot.forEach((doc) => {
+                    const data = doc.data();
+                    globalComments.push({
+                        id: doc.id,
+                        ...data
+                    });
+                });
+
+                if (activeVideoId) {
+                    loadComments(activeVideoId);
+                }
+                updateAllCommentCounts();
+            }, (err) => {
+                console.error("Erreur de synchronisation des commentaires :", err);
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const savedPseudo = localStorage.getItem('user-pseudo');
+            const pseudoInput = document.getElementById('drawer-pseudo-input');
+            if (savedPseudo && pseudoInput) {
+                pseudoInput.value = savedPseudo;
+            }
+
+            document.querySelectorAll('.video-card').forEach(card => {
+                const id = card.getAttribute('data-id');
+                const countEl = document.getElementById(`like-count-${id}`);
+                const initVal = countEl ? (countEl.getAttribute('data-init') || countEl.innerText) : "100";
+                
+                let likes = localStorage.getItem(`likes-count-${id}`);
+                if (!likes) {
+                    likes = initVal;
+                    localStorage.setItem(`likes-count-${id}`, likes);
+                }
+                if (countEl) countEl.innerText = likes;
+
+                const hasLiked = localStorage.getItem(`liked-state-${id}`) === 'true';
+                if (hasLiked) {
+                    const icon = document.getElementById(`like-icon-${id}`);
+                    if (icon) icon.classList.add('like-active');
+                }
+
+                updateCommentCountDisplay(id);
+            });
+
+            initFirebase();
+        });
+
+        async function toggleLike(videoId, event) {
+            if (event) event.stopPropagation();
+            
+            const likeIcon = document.getElementById(`like-icon-${videoId}`);
+            const likeCountEl = document.getElementById(`like-count-${videoId}`);
+            const isLiked = localStorage.getItem(`liked-state-${videoId}`) === 'true';
+
+            if (isLiked) {
+                localStorage.setItem(`liked-state-${videoId}`, 'false');
+                if (likeIcon) likeIcon.classList.remove('like-active');
+
+                if (isFirebaseActive) {
+                    try {
+                        const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'likes', videoId);
+                        const docSnap = await getDoc(docRef);
+                        if (!docSnap.exists()) {
+                            const countEl = document.getElementById(`like-count-${videoId}`);
+                            const initVal = parseInt(countEl ? (countEl.getAttribute('data-init') || "100") : "100");
+                            await setDoc(docRef, { count: Math.max(0, initVal - 1) });
+                        } else {
+                            await setDoc(docRef, { count: increment(-1) }, { merge: true });
+                        }
+                    } catch (err) {
+                        console.error("Erreur de mise à jour des likes :", err);
+                    }
+                } else {
+                    let count = parseInt(localStorage.getItem(`likes-count-${videoId}`)) || 0;
+                    count = Math.max(0, count - 1);
+                    localStorage.setItem(`likes-count-${videoId}`, count);
+                    if (likeCountEl) likeCountEl.innerText = count;
+                }
+            } else {
+                localStorage.setItem(`liked-state-${videoId}`, 'true');
+                if (likeIcon) likeIcon.classList.add('like-active');
+
+                if (isFirebaseActive) {
+                    try {
+                        const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'likes', videoId);
+                        const docSnap = await getDoc(docRef);
+                        if (!docSnap.exists()) {
+                            const countEl = document.getElementById(`like-count-${videoId}`);
+                            const initVal = parseInt(countEl ? (countEl.getAttribute('data-init') || "100") : "100");
+                            await setDoc(docRef, { count: initVal + 1 });
+                        } else {
+                            await setDoc(docRef, { count: increment(1) }, { merge: true });
+                        }
+                    } catch (err) {
+                        console.error("Erreur de mise à jour des likes :", err);
+                    }
+                } else {
+                    let count = parseInt(localStorage.getItem(`likes-count-${videoId}`)) || 0;
+                    count += 1;
+                    localStorage.setItem(`likes-count-${videoId}`, count);
+                    if (likeCountEl) likeCountEl.innerText = count;
+                }
+            }
+        }
+
+        function openComments(videoId, event) {
+            if (event) event.stopPropagation();
+            activeVideoId = videoId;
+            
+            const drawer = document.getElementById('comment-drawer');
+            drawer.style.transform = 'translateY(0)';
+            
+            const errorEl = document.getElementById('drawer-error-msg');
+            if (errorEl) errorEl.classList.add('hidden');
+
+            loadComments(videoId);
+        }
+
+        function closeComments() {
+            const drawer = document.getElementById('comment-drawer');
+            drawer.style.transform = 'translateY(100%)';
+            activeVideoId = null;
+        }
+
+        async function submitComment(event) {
+            if (event) event.stopPropagation();
+            if (!activeVideoId) return;
+
+            const pseudoInput = document.getElementById('drawer-pseudo-input');
+            const commentInput = document.getElementById('drawer-comment-input');
+            const errorEl = document.getElementById('drawer-error-msg');
+
+            const pseudo = pseudoInput.value.trim();
+            const text = commentInput.value.trim();
+
+            if (errorEl) {
+                errorEl.classList.add('hidden');
+                errorEl.innerText = "";
+            }
+
+            if (pseudo === "") {
+                if (errorEl) {
+                    errorEl.innerText = "⚠️ Un pseudo est obligatoire pour pouvoir poster !";
+                    errorEl.classList.remove('hidden');
+                }
+                pseudoInput.focus();
+                return;
+            }
+
+            if (text === "") {
+                if (errorEl) {
+                    errorEl.innerText = "⚠️ Votre commentaire ne peut pas être vide.";
+                    errorEl.classList.remove('hidden');
+                }
+                commentInput.focus();
+                return;
+            }
+
+            localStorage.setItem('user-pseudo', pseudo);
+
+            if (isFirebaseActive) {
+                try {
+                    const commentsCol = collection(db, 'artifacts', appId, 'public', 'data', 'comments');
+                    await addDoc(commentsCol, {
+                        videoId: activeVideoId,
+                        author: pseudo,
+                        text: text,
+                        timestamp: Date.now()
+                    });
+                    commentInput.value = "";
+                } catch (err) {
+                    console.error("Erreur de publication du commentaire :", err);
+                    if (errorEl) {
+                        errorEl.innerText = "❌ Impossible de publier le commentaire en ligne.";
+                        errorEl.classList.remove('hidden');
+                    }
+                }
+            } else {
+                let comments = JSON.parse(localStorage.getItem(`comments-${activeVideoId}`)) || [];
+                comments.push({
+                    author: pseudo,
+                    text: text,
+                    timestamp: Date.now()
+                });
+                localStorage.setItem(`comments-${activeVideoId}`, JSON.stringify(comments));
+                
+                commentInput.value = "";
+                loadComments(activeVideoId);
+                updateCommentCountDisplay(activeVideoId);
+            }
+        }
+
+        function loadComments(videoId) {
+            const listContainer = document.getElementById('drawer-comments-list');
+            const titleEl = document.getElementById('drawer-title');
+            if (!listContainer) return;
+
+            let comments = [];
+            if (isFirebaseActive) {
+                comments = globalComments.filter(c => c.videoId === videoId);
+                comments.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+            } else {
+                comments = JSON.parse(localStorage.getItem(`comments-${videoId}`)) || [];
+            }
+            
+            titleEl.innerText = `Commentaires (${comments.length})`;
+            listContainer.innerHTML = "";
+
+            if (comments.length === 0) {
+                listContainer.innerHTML = `
+                    <div class="text-center py-10 text-zinc-500">
+                        <svg class="w-10 h-10 mx-auto mb-2 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                        </svg>
+                        <p class="text-xs font-semibold">Aucun commentaire pour le moment.</p>
+                        <p class="text-[10px] text-zinc-600 mt-1">Écrivez un pseudo et soyez le premier à réagir !</p>
+                    </div>
+                `;
+                return;
+            }
+
+            comments.forEach(comment => {
+                const authorName = comment.author || "Anonyme";
+                const item = document.createElement('div');
+                item.className = "flex gap-3 items-start border-b border-zinc-800/40 pb-3 animate-fade-in";
+                
+                let dateStr = "Récemment";
+                if (comment.timestamp) {
+                    const dateObj = new Date(comment.timestamp);
+                    dateStr = dateObj.toLocaleDateString('fr-FR', {hour: '2-digit', minute:'2-digit'});
+                }
+
+                item.innerHTML = `
+                    <div class="w-8 h-8 rounded-full bg-red-600/25 text-red-400 flex items-center justify-center font-bold text-xs shrink-0 border border-red-500/20">
+                        ${authorName.charAt(0).toUpperCase()}
+                    </div>
+                    <div class="flex-1 space-y-0.5">
+                        <div class="flex items-center justify-between">
+                            <span class="font-semibold text-xs text-zinc-300">@${authorName}</span>
+                            <span class="text-[9px] text-zinc-500">${dateStr}</span>
+                        </div>
+                        <p class="text-xs text-zinc-200 leading-relaxed">${comment.text}</p>
+                    </div>
+                `;
+                listContainer.appendChild(item);
+            });
+            
+            listContainer.scrollTop = listContainer.scrollHeight;
+        }
+
+        function updateCommentCountDisplay(videoId) {
+            const el = document.getElementById(`comment-count-${videoId}`);
+            if (el) {
+                if (isFirebaseActive) {
+                    const count = globalComments.filter(c => c.videoId === videoId).length;
+                    el.innerText = count;
+                } else {
+                    let comments = JSON.parse(localStorage.getItem(`comments-${videoId}`)) || [];
+                    el.innerText = comments.length;
+                }
+            }
+        }
+
+        function updateAllCommentCounts() {
+            document.querySelectorAll('.video-card').forEach(card => {
+                const id = card.getAttribute('data-id');
+                updateCommentCountDisplay(id);
+            });
+        }
+
+        function shareVideo(videoId, username, event) {
+            if (event) event.stopPropagation();
+            
+            const dummyLink = `${window.location.origin}${window.location.pathname}?video=${videoId}`;
+            
+            const textarea = document.createElement('textarea');
+            textarea.value = dummyLink;
+            textarea.style.position = 'fixed';
+            document.body.appendChild(textarea);
+            textarea.select();
+            
+            try {
+                document.execCommand('copy');
+                const toast = document.getElementById('share-toast');
+                if (toast) {
+                    toast.querySelector('span').innerText = `Lien de ${username} copié !`;
+                    toast.style.opacity = '1';
+                    setTimeout(() => {
+                        toast.style.opacity = '0';
+                    }, 2500);
+                }
+            } catch (err) {
+                console.error('Erreur de copie :', err);
+            }
+            
+            document.body.removeChild(textarea);
+        }
+
+        window.toggleLike = toggleLike;
+        window.openComments = openComments;
+        window.closeComments = closeComments;
+        window.submitComment = submitComment;
+        window.shareVideo = shareVideo;
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js').then(() => console.log('SW OK')).catch(() => {});
+        }
+    </script>
+</body>
+</html>
