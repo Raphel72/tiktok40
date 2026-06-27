@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>TikTok pour les personnes de plus de 40 ans</title>
+    <link href="manifest.json" rel="manifest"/>
+    <link href="logo.png" rel="apple-touch-icon"/>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=300;400;600;700;900&amp;display=swap" rel="stylesheet"/>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .video-container { scroll-snap-type: y mandatory; overflow-y: scroll; height: 100vh; }
+        .video-card { scroll-snap-align: start; height: 100vh; }
+        .video-container::-webkit-scrollbar { display: none; }
+        .drawer-transition { transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+        @keyframes heart-pop { 0% { transform: scale(1); } 50% { transform: scale(1.3); } 100% { transform: scale(1); } }
+        .like-active { animation: heart-pop 0.3s ease-in-out; color: #ef4444 !important; fill: #ef4444 !important; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade-in { animation: fadeIn 0.25s ease-out forwards; }
+        .video-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 5; background: transparent; }
+    </style>
+</head>
+<body class="bg-zinc-950 text-white flex justify-center overflow-hidden select-none">
+<div class="video-container w-full max-w-md bg-zinc-900 relative border-x border-zinc-800 shadow-2xl">
+
+    <div class="video-card relative w-full flex items-center justify-center bg-black cursor-pointer" data-id="v1" onclick="handleVideoClick('v1')">
+        <div class="video-overlay"></div>
+        <iframe id="iframe-v1" class="w-full h-full object-cover pointer-events-none" src="https://www.youtube.com/embed/otbYb5hfL84?enablejsapi=1&autoplay=0&mute=0&loop=1&playlist=otbYb5hfL84&controls=0&rel=0&modestbranding=1&showinfo=0" frameborder="0" allow="autoplay; encrypted-media"></iframe>
+        <div class="absolute right-3 bottom-32 flex flex-col items-center gap-5 z-20">
+            <button onclick="toggleLike('v1', event)" class="flex flex-col items-center gap-1 bg-black/40 p-2.5 rounded-full backdrop-blur-sm border border-white/10"><svg id="like-icon-v1" class="w-6 h-6 text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg><span id="like-count-v1" class="text-[11px] font-bold">0</span></button>
+            <button onclick="openComments('v1', event)" class="flex flex-col items-center gap-1 bg-black/40 p-2.5 rounded-full backdrop-blur-sm border border-white/10"><svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg><span id="comment-count-v1" class="text-[11px] font-bold">0</span></button>
+        </div>
+        <div class="absolute bottom-5 left-5 right-20 z-10 bg-black/60 p-4 rounded-xl backdrop-blur-sm border border-white/10 shadow-lg">
+            <p class="text-xs mt-1 text-gray-200">Présentation #presentation</p>
+        </div>
+    </div>
+
+    <div class="video-card relative w-full flex items-center justify-center bg-black cursor-pointer" data-id="v2" onclick="handleVideoClick('v2')">
+        <div class="video-overlay"></div>
+        <iframe id="iframe-v2" class="w-full h-full object-cover pointer-events-none" src="https://www.youtube.com/embed/GHcSrlnjAjQ?enablejsapi=1&autoplay=0&mute=0&loop=1&playlist=GHcSrlnjAjQ&controls=0&rel=0&modestbranding=1&showinfo=0" frameborder="0" allow="autoplay; encrypted-media"></iframe>
+        <div class="absolute right-3 bottom-32 flex flex-col items-center gap-5 z-20">
+            <button onclick="toggleLike('v2', event)" class="flex flex-col items-center gap-1 bg-black/40 p-2.5 rounded-full backdrop-blur-sm border border-white/10"><svg id="like-icon-v2" class="w-6 h-6 text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg><span id="like-count-v2" class="text-[11px] font-bold">0</span></button>
+            <button onclick="openComments('v2', event)" class="flex flex-col items-center gap-1 bg-black/40 p-2.5 rounded-full backdrop-blur-sm border border-white/10"><svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 alert-8 9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg><span id="comment-count-v2" class="text-[11px] font-bold">0</span></button>
+        </div>
+        <div class="absolute bottom-5 left-5 right-20 z-10 bg-black/60 p-4 rounded-xl backdrop-blur-sm border border-white/10 shadow-lg">
+            <p class="text-xs mt-1 text-gray-200">Présentation 2 #presentation2</p>
+        </div>
+    </div>
+
+    <div class="video-card relative w-full flex items-center justify-center bg-black cursor-pointer" data-id="v3" onclick="handleVideoClick('v3')">
+        <div class="video-overlay"></div>
+        <iframe id="iframe-v3" class="w-full h-full object-cover pointer-events-none" src="https://www.youtube.com/embed/YGYsDQ769UQ?enablejsapi=1&autoplay=0&mute=0&loop=1&playlist=YGYsDQ769UQ&controls=0&rel=0&modestbranding=1&showinfo=0" frameborder="0" allow="autoplay; encrypted-media"></iframe>
+        <div class="absolute right-3 bottom-32 flex flex-col items-center gap-5 z-20">
+            <button onclick="toggleLike('v3', event)" class="flex flex-col items-center gap-1 bg-black/40 p-2.5 rounded-full backdrop-blur-sm border border-white/10"><svg id="like-icon-v3" class="w-6 h-6 text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg><span id="like-count-v3" class="text-[11px] font-bold">0</span></button>
+            <button onclick="openComments('v3', event)" class="flex flex-col items-center gap-1 bg-black/40 p-2.5 rounded-full backdrop-blur-sm border border-white/10"><svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg><span id="comment-count-v3" class="text-[11px] font-bold">0</span></button>
+        </div>
+        <div class="absolute bottom-5 left-5 right-20 z-10 bg-black/60 p-4 rounded-xl backdrop-blur-sm border border-white/10 shadow-lg">
+            <p class="text-xs mt-1 text-gray-200">Glaçon #glacon</p>
+        </div>
+    </div>
+
+    <div class="video-card relative w-full flex items-center justify-center bg-black cursor-pointer" data-id="v4" onclick="handleVideoClick('v4')">
+        <div class="video-overlay"></div>
+        <iframe id="iframe-v4" class="w-full h-full object-cover pointer-events-none" src="https://www.youtube.com/embed/MwTSolE06CQ?enablejsapi=1&autoplay=0&mute=0&loop=1&playlist=MwTSolE06CQ&controls=0&rel=0&modestbranding=1&showinfo=0" frameborder="0" allow="autoplay; encrypted-media"></iframe>
+        <div class="absolute right-3 bottom-32 flex flex-col items-center gap-5 z-20">
+            <button onclick="toggleLike('v4', event)" class="flex flex-col items-center gap-1 bg-black/40 p-2.5 rounded-full backdrop-blur-sm border border-white/10"><svg id="like-icon-v4" class="w-6 h-6 text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg><span id="like-count-v4" class="text-[11px] font-bold">0</span></button>
+            <button onclick="openComments('v4', event)" class="flex flex-col items-center gap-1 bg-black/40 p-2.5 rounded-full backdrop-blur-sm border border-white/10"><svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg><span id="comment-count-v4" class="text-[11px] font-bold">0</span></button>
+        </div>
+        <div class="absolute bottom-5 left-5 right-20 z-10 bg-black/60 p-4 rounded-xl backdrop-blur-sm border border-white/10 shadow-lg">
+            <p class="text-xs mt-1 text-gray-200">Salom #salom</p>
+        </div>
+    </div>
+
+    <div class="video-card relative w-full flex items-center justify-center bg-black cursor-pointer" data-id="v5" onclick="handleVideoClick('v5')">
+        <div class="video-overlay"></div>
+        <iframe id="iframe-v5" class="w-full h-full object-cover pointer-events-none" src="https://www.youtube.com/embed/3TW6v8LeHlk?enablejsapi=1&autoplay=0&mute=0&loop=1&playlist=3TW6v8LeHlk&controls=0&rel=0&modestbranding=1&showinfo=0" frameborder="0" allow="autoplay; encrypted-media"></iframe>
+        <div class="absolute right-3 bottom-32 flex flex-col items-center gap-5 z-20">
+            <button onclick="toggleLike('v5', event)" class="flex flex-col items-center gap-1 bg-black/40 p-2.5 rounded-full backdrop-blur-sm border border-white/10"><svg id="like-icon-v5" class="w-6 h-6 text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg><span id="like-count-v5" class="text-[11px] font-bold">0</span></button>
+            <button onclick="openComments('v5', event)" class="flex flex-col items-center gap-1 bg-black/40 p-2.5 rounded-full backdrop-blur-sm border border-white/10"><svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg><span id="comment-count-v5" class="text-[11px] font-bold">0</span></button>
+        </div>
+        <div class="absolute bottom-5 left-5 right-20 z-10 bg-black/60 p-4 rounded-xl backdrop-blur-sm border border-white/10 shadow-lg">
+            <p class="text-xs mt-1 text-gray-200">Yuki #yuki</p>
+        </div>
+    </div>
+
+    <div class="video-card relative w-full flex items-center justify-center bg-black cursor-pointer" data-id="v6" onclick="handleVideoClick('v6')">
+        <div class="video-overlay"></div>
+        <iframe id="iframe-v6" class="w-full h-full object-cover pointer-events-none" src="https://www.youtube.com/embed/o4kTjs0ebLE?enablejsapi=1&autoplay=0&mute=0&loop=1&playlist=o4kTjs0ebLE&controls=0&rel=0&modestbranding=1&showinfo=0" frameborder="0" allow="autoplay; encrypted-media"></iframe>
+        <div class="absolute right-3 bottom-32 flex flex-col items-center gap-5 z-20">
+            <button onclick="toggleLike('v6', event)" class="flex flex-col items-center gap-1 bg-black/40 p-2.5 rounded-full backdrop-blur-sm border border-white/10"><svg id="like-icon-v6" class="w-6 h-6 text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg><span id="like-count-v6" class="text-[11px] font-bold">0</span></button>
+            <button onclick="openComments('v6', event)" class="flex flex-col items-center gap-1 bg-black/40 p-2.5 rounded-full backdrop-blur-sm border border-white/10"><svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg><span id="comment-count-v6" class="text-[11px] font-bold">0</span></button>
+        </div>
+        <div class="absolute bottom-5 left-5 right-20 z-10 bg-black/60 p-4 rounded-xl backdrop-blur-sm border border-white/10 shadow-lg">
+            <p class="text-xs mt-1 text-gray-200">Wrap #wrap</p>
+        </div>
+    </div>
+
+    <div class="video-card relative w-full flex items-center justify-center bg-black cursor-pointer" data-id="v7" onclick="handleVideoClick('v7')">
+        <div class="video-overlay"></div>
+        <iframe id="iframe-v7" class="w-full h-full object-cover pointer-events-none" src="https://www.youtube.com/embed/5vsy9VQC96c?enablejsapi=1&autoplay=0&mute=0&loop=1&playlist=5vsy9VQC96c&controls=0&rel=0&modestbranding=1&showinfo=0" frameborder="0" allow="autoplay; encrypted-media"></iframe>
+        <div class="absolute right-3 bottom-32 flex flex-col items-center gap-5 z-20">
+            <button onclick="toggleLike('v7', event)" class="flex flex-col items-center gap-1 bg-black/40 p-2.5 rounded-full backdrop-blur-sm border border-white/10"><svg id="like-icon-v7" class="w-6 h-6 text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg><span id="like-count-v7" class="text-[11px] font-bold">0</span></button>
+            <button onclick="openComments('v7', event)" class="flex flex-col items-center gap-1 bg-black/40 p-2.5 rounded-full backdrop-blur-sm border border-white/10"><svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg><span id="comment-count-v7" class="text-[11px] font-bold">0</span></button>
+        </div>
+        <div class="absolute bottom-5 left-5 right-20 z-10 bg-black/60 p-4 rounded-xl backdrop-blur-sm border border-white/10 shadow-lg">
+            <p class="text-xs mt-1 text-gray-200">sucotabaR #sucotabar</p>
+        </div>
+    </div>
+
+    <div class="video-card relative w-full flex items-center justify-center bg-black cursor-pointer" data-id="v8" onclick="handleVideoClick('v8')">
+        <div class="video-overlay"></div>
+        <iframe id="iframe-v8" class="w-full h-full object-cover pointer-events-none" src="https://www.youtube.com/embed/_X8G4Yu_ajc?enablejsapi=1&autoplay=0&mute=0&loop=1&playlist=_X8G4Yu_ajc&controls=0&rel=0&modestbranding=1&showinfo=0" frameborder="0" allow="autoplay; encrypted-media"></iframe>
+        <div class="absolute right-3 bottom-32 flex flex-col items-center gap-5 z-20">
+            <button onclick="toggleLike('v8', event)" class="flex flex-col items-center gap-1 bg-black/40 p-2.5 rounded-full backdrop-blur-sm border border-white/10"><svg id="like-icon-v8" class="w-6 h-6 text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg><span id="like-count-v8" class="text-[11px] font-bold">0</span></button>
+            <button onclick="openComments('v8', event)" class="flex flex-col items-center gap-1 bg-black/40 p-2.5 rounded-full backdrop-blur-sm border border-white/10"><svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg><span id="comment-count-v8" class="text-[11px] font-bold">0</span></button>
+        </div>
+        <div class="absolute bottom-5 left-5 right-20 z-10 bg-black/60 p-4 rounded-xl backdrop-blur-sm border border-white/10 shadow-lg">
+            <p class="text-xs mt-1 text-gray-200">Arthur #arthur</p>
+        </div>
+    </div>
+
+    <div class="video-card relative w-full flex items-center justify-center bg-black cursor-pointer" data-id="v9" onclick="handleVideoClick('v9')">
+        <div class="video-overlay"></div>
+        <iframe id="iframe-v9" class="w-full h-full object-cover pointer-events-none" src="https://www.youtube.com/embed/UVwbjsOLTLY?enablejsapi=1&autoplay=0&mute=0&loop=1&playlist=UVwbjsOLTLY&controls=0&rel=0&modestbranding=1&showinfo=0" frameborder="0" allow="autoplay; encrypted-media"></iframe>
+        <div class="absolute right-3 bottom-32 flex flex-col items-center gap-5 z-20">
+            <button onclick="toggleLike('v9', event)" class="flex flex-col items-center gap-1 bg-black/40 p-2.5 rounded-full backdrop-blur-sm border border-white/10"><svg id="like-icon-v9" class="w-6 h-6 text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg><span id="like-count-v9" class="text-[11px] font-bold">0</span></button>
+            <button onclick="openComments('v9', event)" class="flex flex-col items-center gap-1 bg-black/40 p-2.5 rounded-full backdrop-blur-sm border border-white/10"><svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg><span id="comment-count-v9" class="text-[11px] font-bold">0</span></button>
+        </div>
+        <div class="absolute bottom-5 left-5 right-20 z-10 bg-black/60 p-4 rounded-xl backdrop-blur-sm border border-white/10 shadow-lg">
+            <p class="text-xs mt-1 text-gray-200">Peur #peur</p>
+        </div>
+    </div>
+
+    <div class="video-card relative w-full flex items-center justify-center bg-black cursor-pointer" data-id="v10" onclick="handleVideoClick('v10')">
+        <div class="video-overlay"></div>
+        <iframe id="iframe-v10" class="w-full h-full object-cover pointer-events-none" src="https://www.youtube.com/embed/3VTBSREsOps?enablejsapi=1&autoplay=0&mute=0&loop=1&playlist=3VTBSREsOps&controls=0&rel=0&modestbranding=1&showinfo=0" frameborder="0" allow="autoplay; encrypted-media"></iframe>
+        <div class="absolute right-3 bottom-32 flex flex-col items-center gap-5 z-20">
+            <button onclick="toggleLike('v10', event)" class="flex flex-col items-center gap-1 bg-black/40 p-2.5 rounded-full backdrop-blur-sm border border-white/10"><svg id="like-icon-v10" class="w-6 h-6 text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg><span id="like-count-v10" class="text-[11px] font-bold">0</span></button>
+            <button onclick="openComments('v10', event)" class="flex flex-col items-center gap-1 bg-black/40 p-2.5 rounded-full backdrop-blur-sm border border-white/10"><svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg><span id="comment-count-v10" class="text-[11px] font-bold">0</span></button>
+        </div>
+        <div class="absolute bottom-5 left-5 right-20 z-10 bg-black/60 p-4 rounded-xl backdrop-blur-sm border border-white/10 shadow-lg">
+            <p class="text-xs mt-1 text-gray-200">sucotabaB #sucotabab</p>
+        </div>
+    </div>
+
+    <div class="video-card relative w-full flex items-center justify-center bg-black cursor-pointer" data-id="v11" onclick="handleVideoClick('v11')">
+        <div class="video-overlay"></div>
+        <iframe id="iframe-v11" class="w-full h-full object-cover pointer-events-none" src="https://www.youtube.com/embed/rAdcZWFajJc?enablejsapi=1&autoplay=0&mute=0&loop=1&playlist=rAdcZWFajJc&controls=0&rel=0&modestbranding=1&showinfo=0" frameborder="0" allow="autoplay; encrypted-media"></iframe>
+        <div class="absolute right-3 bottom-32 flex flex-col items-center gap-5 z-20">
+            <button onclick="toggleLike('v11', event)" class="flex flex-col items-center gap-1 bg-black/40 p-2.5 rounded-full backdrop-blur-sm border border-white/10"><svg id="like-icon-v11" class="w-6 h-6 text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg><span id="like-count-v11" class="text-[11px] font-bold">0</span></button>
+            <button onclick="openComments('v11', event)" class="flex flex-col items-center gap-1 bg-black/40 p-2.5 rounded-full backdrop-blur-sm border border-white/10"><svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg><span id="comment-count-v11" class="text-[11px] font-bold">0</span></button>
+        </div>
+        <div class="absolute bottom-5 left-5 right-20 z-10 bg-black/60 p-4 rounded-xl backdrop-blur-sm border border-white/10 shadow-lg">
+            <p class="text-xs mt-1 text-gray-200">Sac #sac</p>
+        </div>
+    </div>
+
+    <div class="video-card relative w-full flex items-center justify-center bg-black cursor-pointer" data-id="v12" onclick="handleVideoClick('v12')">
+        <div class="video-overlay"></div>
+        <iframe id="iframe-v12" class="w-full h-full object-cover pointer-events-none" src="https://www.youtube.com/embed/vdwbVnq9zng?enablejsapi=1&autoplay=0&mute=0&loop=1&playlist=vdwbVnq9zng&controls=0&rel=0&modestbranding=1&showinfo=0" frameborder="0" allow="autoplay; encrypted-media"></iframe>
+        <div class="absolute right-3 bottom-32 flex flex-col items-center gap-5 z-20">
+            <button onclick="toggleLike('v12', event)" class="flex flex-col items-center gap-1 bg-black/40 p-2.5 rounded-full backdrop-blur-sm border border-white/10"><svg id="like-icon-v12" class="w-6 h-6 text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg><span id="like-count-v12" class="text-[11px] font-bold">0</span></button>
+            <button onclick="openComments('v12', event)" class="flex flex-col items-center gap-1 bg-black/40 p-2.5 rounded-full backdrop-blur-sm border border-white/10"><svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg><span id="comment-count-v12" class="text-[11px] font-bold">0</span></button>
+        </div>
+        <div class="absolute bottom-5 left-5 right-20 z-10 bg-black/60 p-4 rounded-xl backdrop-blur-sm border border-white/10 shadow-lg">
+            <p class="text-xs mt-1 text-gray-200">Lebron #lebron</p>
+        </div>
+    </div>
+
+    <div class="video-card relative w-full flex items-center justify-center bg-black cursor-pointer" data-id="v13" onclick="handleVideoClick('v13')">
+        <div class="video-overlay"></div>
+        <iframe id="iframe-v13" class="w-full h-full object-cover pointer-events-none" src="https://www.youtube.com/embed/o8HGJt2Btb8?enablejsapi=1&autoplay=0&mute=0&loop=1&playlist=o8HGJt2Btb8&controls=0&rel=0&modestbranding=1&showinfo=0" frameborder="0" allow="autoplay; encrypted-media"></iframe>
+        <div class="absolute right-3 bottom-32 flex flex-col items-center gap-5 z-20">
+            <button onclick="toggleLike('v13', event)" class="flex flex-col items-center gap-1 bg-black/40 p-2.5 rounded-full backdrop-blur-sm border border-white/10"><svg id="like-icon-v13" class="w-6 h-6 text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg><span id="like-count-v13" class="text-[11px] font-bold">0</span></button>
+            <button onclick="openComments('v13', event)" class="flex flex-col items-center gap-1 bg-black/40 p-2.5 rounded-full backdrop-blur-sm border border-white/10"><svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg><span id="comment-count-v13" class="text-[11px] font-bold">0</span></button>
+        </div>
+        <div class="absolute bottom-5 left-5 right-20 z-10 bg-black/60 p-4 rounded-xl backdrop-blur-sm border border-white/10 shadow-lg">
+            <p class="text-xs mt-1 text-gray-200">Cadenas #cadenas</p>
+        </div>
+    </div>
+
+    <div class="video-card relative w-full flex items-center justify-center bg-black cursor-pointer" data-id="v14" onclick="handleVideoClick('v14')">
+        <div class="video-overlay"></div>
+        <iframe id="iframe-v14" class="w-full h-full object-cover pointer-events-none" src="https://www.youtube.com/embed/EO4ybaO51oo?enablejsapi=1&autoplay=0&mute=0&loop=1&playlist=EO4ybaO51oo&controls=0&rel=0&modestbranding=1&showinfo=0" frameborder="0" allow="autoplay; encrypted-media"></iframe>
+        <div class="absolute right-3 bottom-32 flex flex-col items-center gap-5 z-20">
+            <button onclick="toggleLike('v14', event)" class="flex flex-col items-center gap-1 bg-black/40 p-2.5 rounded-full backdrop-blur-sm border border-white/10"><svg id="like-icon-v14" class="w-6 h-6 text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg><span id="like-count-v14" class="text-[11px] font-bold">0</span></button>
+            <button onclick="openComments('v14', event)" class="flex flex-col items-center gap-1 bg-black/40 p-2.5 rounded-full backdrop-blur-sm border border-white/10"><svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg><span id="comment-count-v14" class="text-[11px] font-bold">0</span></button>
+        </div>
+        <div class="absolute bottom-5 left-5 right-20 z-10 bg-black/60 p-4 rounded-xl backdrop-blur-sm border border-white/10 shadow-lg">
+            <p class="text-xs mt-1 text-gray-200">Chalala #chalala</p>
+        </div>
+    </div>
+
+    <div class="video-card relative w-full flex items-center justify-center bg-black cursor-pointer" data-id="v15" onclick="handleVideoClick('v15')">
+        <div class="video-overlay"></div>
+        <iframe id="iframe-v15" class="w-full h-full object-cover pointer-events-none" src="https://www.youtube.com/embed/jIPLdZ7iYkE?enablejsapi=1&autoplay=0&mute=0&loop=1&playlist=jIPLdZ7iYkE&controls=0&rel=0&modestbranding=1&showinfo=0" frameborder="0" allow="autoplay; encrypted-media"></iframe>
+        <div class="absolute right-3 bottom-32 flex flex-col items-center gap-5 z-20">
+            <button onclick="toggleLike('v15', event)" class="flex flex-col items-center gap-1 bg-black/40 p-2.5 rounded-full backdrop-blur-sm border border-white/10"><svg id="like-icon-v15" class="w-6 h-6 text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg><span id="like-count-v15" class="text-[11px] font-bold">0</span></button>
+            <button onclick="openComments('v15', event)" class="flex flex-col items-center gap-1 bg-black/40 p-2.5 rounded-full backdrop-blur-sm border border-white/10"><svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg><span id="comment-count-v15" class="text-[11px] font-bold">0</span></button>
+        </div>
+        <div class="absolute bottom-5 left-5 right-20 z-10 bg-black/60 p-4 rounded-xl backdrop-blur-sm border border-white/10 shadow-lg">
+            <p class="text-xs mt-1 text-gray-200">PartirR #partirr</p>
+        </div>
+    </div>
+
+    <div class="video-card relative w-full flex items-center justify-center bg-black cursor-pointer" data-id="v16" onclick="handleVideoClick('v16')">
+        <div class="video-overlay"></div>
+        <iframe id="iframe-v16" class="w-full h-full object-cover pointer-events-none" src="https://www.youtube.com/embed/a2V-h-P-vjc?enablejsapi=1&autoplay=0&mute=0&loop=1&playlist=a2V-h-P-vjc&controls=0&rel=0&modestbranding=1&showinfo=0" frameborder="0" allow="autoplay; encrypted-media"></iframe>
+        <div class="absolute right-3 bottom-32 flex flex-col items-center gap-5 z-20">
+            <button onclick="toggleLike('v16', event)" class="flex flex-col items-center gap-1 bg-black/40 p-2.5 rounded-full backdrop-blur-sm border border-white/10"><svg id="like-icon-v16" class="w-6 h-6 text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg><span id="like-count-v16" class="text-[11px] font-bold">0</span></button>
+            <button onclick="openComments('v16', event)" class="flex flex-col items-center gap-1 bg-black/40 p-2.5 rounded-full backdrop-blur-sm border border-white/10"><svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg><span id="comment-count-v16" class="text-[11px] font-bold">0</span></button>
+        </div>
+        <div class="absolute bottom-5 left-5 right-20 z-10 bg-black/60 p-4 rounded-xl backdrop-blur-sm border border-white/10 shadow-lg">
+            <p class="text-xs mt-1 text-gray-200">Bonbon #bonbon</p>
+        </div>
+    </div>
+
+    <div class="video-card relative w-full flex items-center justify-center bg-black cursor-pointer" data-id="v17" onclick="handleVideoClick('v17')">
+        <div class="video-overlay"></div>
+        <iframe id="iframe-v17" class="w-full h-full object-cover pointer-events-none" src="https://www.youtube.com/embed/MBj8XM_rytQ?enablejsapi=1&autoplay=0&mute=0&loop=1&playlist=MBj8XM_rytQ&controls=0&rel=0&modestbranding=1&showinfo=0" frameborder="0" allow="autoplay; encrypted-media"></iframe>
+        <div class="absolute right-3 bottom-32 flex flex-col items-center gap-5 z-20">
+            <button onclick="toggleLike('v17', event)" class="flex flex-col items-center gap-1 bg-black/40 p-2.5 rounded-full backdrop-blur-sm border border-white/10"><svg id="like-icon-v17" class="w-6 h-6 text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg><span id="like-count-v17" class="text-[11px] font-bold">0</span></button>
+            <button onclick="openComments('v17', event)" class="flex flex-col items-center gap-1 bg-black/40 p-2.5 rounded-full backdrop-blur-sm border border-white/10"><svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg><span id="comment-count-v17" class="text-[11px] font-bold">0</span></button>
+        </div>
+        <div class="absolute bottom-5 left-5 right-20 z-10 bg-black/60 p-4 rounded-xl backdrop-blur-sm border border-white/10 shadow-lg">
+            <p class="text-xs mt-1 text-gray-200">Ionfloor #ionfloor</p>
+        </div>
+    </div>
+
+    <div class="video-card relative w-full flex items-center justify-center bg-black cursor-pointer" data-id="v18" onclick="handleVideoClick('v18')">
+        <div class="video-overlay"></div>
+        <iframe id="iframe-v18" class="w-full h-full object-cover pointer-events-none" src="https://www.youtube.com/embed/Tib8IATBQ0Q?enablejsapi=1&autoplay=0&mute=0&loop=1&playlist=Tib8IATBQ0Q&controls=0&rel=0&modestbranding=1&showinfo=0" frameborder="0" allow="autoplay; encrypted-media"></iframe>
+        <div class="absolute right-3 bottom-32 flex flex-col items-center gap-5 z-20">
+            <button onclick="toggleLike('v18', event)" class="flex flex-col items-center gap-1 bg-black/40 p-2.5 rounded-full backdrop-blur-sm border border-white/10"><svg id="like-icon-v18" class="w-6 h-6 text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg><span id="like-count-v18" class="text-[11px] font-bold">0</span></button>
+            <button onclick="openComments('v18', event)" class="flex flex-col items-center gap-1 bg-black/40 p-2.5 rounded-full backdrop-blur-sm border border-white/10"><svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg><span id="comment-count-v18" class="text-[11px] font-bold">0</span></button>
+        </div>
+        <div class="absolute bottom-5 left-5 right-20 z-10 bg-black/60 p-4 rounded-xl backdrop-blur-sm border border-white/10 shadow-lg">
+            <p class="text-xs mt-1 text-gray-200">Neck #neck</p>
+        </div>
+    </div>
+
+    <div class="video-card relative w-full flex items-center justify-center bg-black cursor-pointer" data-id="v19" onclick="handleVideoClick('v19')">
+        <div class="video-overlay"></div>
+        <iframe id="iframe-v19" class="w-full h-full object-cover pointer-events-none" src="https://www.youtube.com/embed/ed6wvwzj6Qs?enablejsapi=1&autoplay=0&mute=0&loop=1&playlist=ed6wvwzj6Qs&controls=0&rel=0&modestbranding=1&showinfo=0" frameborder="0" allow="autoplay; encrypted-media"></iframe>
+        <div class="absolute right-3 bottom-32 flex flex-col items-center gap-5 z-20">
+            <button onclick="toggleLike('v19', event)" class="flex flex-col items-center gap-1 bg-black/40 p-2.5 rounded-full backdrop-blur-sm border border-white/10"><svg id="like-icon-v19" class="w-6 h-6 text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg><span id="like-count-v19" class="text-[11px] font-bold">0</span></button>
+            <button onclick="openComments('v19', event)" class="flex flex-col items-center gap-1 bg-black/40 p-2.5 rounded-full backdrop-blur-sm border border-white/10"><svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg><span id="comment-count-v19" class="text-[11px] font-bold">0</span></button>
+        </div>
+        <div class="absolute bottom-5 left-5 right-20 z-10 bg-black/60 p-4 rounded-xl backdrop-blur-sm border border-white/10 shadow-lg">
+            <p class="text-xs mt-1 text-gray-200">DanceSG #dancesg</p>
+        </div>
+    </div>
+
+    <div class="video-card relative w-full flex items-center justify-center bg-black cursor-pointer" data-id="v20" onclick="handleVideoClick('v20')">
+        <div class="video-overlay"></div>
+        <iframe id="iframe-v20" class="w-full h-full object-cover pointer-events-none" src="https://www.youtube.com/embed/9hPpOhf7rqs?enablejsapi=1&autoplay=0&mute=0&loop=1&playlist=9hPpOhf7rqs&controls=0&rel=0&modestbranding=1&showinfo=0" frameborder="0" allow="autoplay; encrypted-media"></iframe>
+        <div class="absolute right-3 bottom-32 flex flex-col items-center gap-5 z-20">
+            <button onclick="toggleLike('v20', event)" class="flex flex-col items-center gap-1 bg-black/40 p-2.5 rounded-full backdrop-blur-sm border border-white/10"><svg id="like-icon-v20" class="w-6 h-6 text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg><span id="like-count-v20" class="text-[11px] font-bold">0</span></button>
+            <button onclick="openComments('v20', event)" class="flex flex-col items-center gap-1 bg-black/40 p-2.5 rounded-full backdrop-blur-sm border border-white/10"><svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg><span id="comment-count-v20" class="text-[11px] font-bold">0</span></button>
+        </div>
+        <div class="absolute bottom-5 left-5 right-20 z-10 bg-black/60 p-4 rounded-xl backdrop-blur-sm border border-white/10 shadow-lg">
+            <p class="text-xs mt-1 text-gray-200">PartirB #partirb</p>
+        </div>
+    </div>
+
+    <div class="video-card relative w-full flex items-center justify-center bg-black cursor-pointer" data-id="v21" onclick="handleVideoClick('v21')">
+        <div class="video-overlay"></div>
+        <iframe id="iframe-v21" class="w-full h-full object-cover pointer-events-none" src="https://www.youtube.com/embed/L1hWy0J_WAU?enablejsapi=1&autoplay=0&mute=0&loop=1&playlist=L1hWy0J_WAU&controls=0&rel=0&modestbranding=1&showinfo=0" frameborder="0" allow="autoplay; encrypted-media"></iframe>
+        <div class="absolute right-3 bottom-32 flex flex-col items-center gap-5 z-20">
+            <button onclick="toggleLike('v21', event)" class="flex flex-col items-center gap-1 bg-black/40 p-2.5 rounded-full backdrop-blur-sm border border-white/10"><svg id="like-icon-v21" class="w-6 h-6 text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg><span id="like-count-v21" class="text-[11px] font-bold">0</span></button>
+            <button onclick="openComments('v21', event)" class="flex flex-col items-center gap-1 bg-black/40 p-2.5 rounded-full backdrop-blur-sm border border-white/10"><svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg><span id="comment-count-v21" class="text-[11px] font-bold">0</span></button>
+        </div>
+        <div class="absolute bottom-5 left-5 right-20 z-10 bg-black/60 p-4 rounded-xl backdrop-blur-sm border border-white/10 shadow-lg">
+            <p class="text-xs mt-1 text-gray-200">Billets #billets</p>
+        </div>
+    </div>
+
+    <div class="video-card relative w-full flex items-center justify-center bg-black cursor-pointer" data-id="v22" onclick="handleVideoClick('v22')">
+        <div class="video-overlay"></div>
+        <iframe id="iframe-v22" class="w-full h-full object-cover pointer-events-none" src="https://www.youtube.com/embed/Ln74ZGQI0Zc?enablejsapi=1&autoplay=0&mute=0&loop=1&playlist=Ln74ZGQI0Zc&controls=0&rel=0&modestbranding=1&showinfo=0" frameborder="0" allow="autoplay; encrypted-media"></iframe>
+        <div class="absolute right-3 bottom-32 flex flex-col items-center gap-5 z-20">
+            <button onclick="toggleLike('v22', event)" class="flex flex-col items-center gap-1 bg-black/40 p-2.5 rounded-full backdrop-blur-sm border border-white/10"><svg id="like-icon-v22" class="w-6 h-6 text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg><span id="like-count-v22" class="text-[11px] font-bold">0</span></button>
+            <button onclick="openComments('v22', event)" class="flex flex-col items-center gap-1 bg-black/40 p-2.5 rounded-full backdrop-blur-sm border border-white/10"><svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg><span id="comment-count-v22" class="text-[11px] font-bold">0</span></button>
+        </div>
+        <div class="absolute bottom-5 left-5 right-20 z-10 bg-black/60 p-4 rounded-xl backdrop-blur-sm border border-white/10 shadow-lg">
+            <p class="text-xs mt-1 text-gray-200">Badies #badies</p>
+        </div>
+    </div>
+
+    <div class="video-card relative w-full flex items-center justify-center bg-black cursor-pointer" data-id="v23" onclick="handleVideoClick('v23')">
+        <div class="video-overlay"></div>
+        <iframe id="iframe-v23" class="w-full h-full object-cover pointer-events-none" src="https://www.youtube.com/embed/6ht7bTMG8k8?enablejsapi=1&autoplay=0&mute=0&loop=1&playlist=6ht7bTMG8k8&controls=0&rel=0&modestbranding=1&showinfo=0" frameborder="0" allow="autoplay; encrypted-media"></iframe>
+        <div class="absolute right-3 bottom-32 flex flex-col items-center gap-5 z-20">
+            <button onclick="toggleLike('v23', event)" class="flex flex-col items-center gap-1 bg-black/40 p-2.5 rounded-full backdrop-blur-sm border border-white/10"><svg id="like-icon-v23" class="w-6 h-6 text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg><span id="like-count-v23" class="text-[11px] font-bold">0</span></button>
+            <button onclick="openComments('v23', event)" class="flex flex-col items-center gap-1 bg-black/40 p-2.5 rounded-full backdrop-blur-sm border border-white/10"><svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg><span id="comment-count-v23" class="text-[11px] font-bold">0</span></button>
+        </div>
+        <div class="absolute bottom-5 left-5 right-20 z-10 bg-black/60 p-4 rounded-xl backdrop-blur-sm border border-white/10 shadow-lg">
+            <p class="text-xs mt-1 text-gray-200">Forrain #forrain</p>
+        </div>
+    </div>
+
+    <div class="video-card relative w-full flex items-center justify-center bg-black cursor-pointer" data-id="v24" onclick="handleVideoClick('v24')">
+        <div class="video-overlay"></div>
+        <iframe id="iframe-v24" class="w-full h-full object-cover pointer-events-none" src="https://www.youtube.com/embed/VmlyP6YHIbQ?enablejsapi=1&autoplay=0&mute=0&loop=1&playlist=VmlyP6YHIbQ&controls=0&rel=0&modestbranding=1&showinfo=0" frameborder="0" allow="autoplay; encrypted-media"></iframe>
+        <div class="absolute right-3 bottom-32 flex flex-col items-center gap-5 z-20">
+            <button onclick="toggleLike('v24', event)" class="flex flex-col items-center gap-1 bg-black/40 p-2.5 rounded-full backdrop-blur-sm border border-white/10"><svg id="like-icon-v24" class="w-6 h-6 text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg><span id="like-count-v24" class="text-[11px] font-bold">0</span></button>
+            <button onclick="openComments('v24', event)" class="flex flex-col items-center gap-1 bg-black/40 p-2.5 rounded-full backdrop-blur-sm border border-white/10"><svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg><span id="comment-count-v24" class="text-[11px] font-bold">0</span></button>
+        </div>
+        <div class="absolute bottom-5 left-5 right-20 z-10 bg-black/60 p-4 rounded-xl backdrop-blur-sm border border-white/10 shadow-lg">
+            <p class="text-xs mt-1 text-gray-200">Prombal #prombal</p>
+        </div>
+    </div>
+
+    <div class="video-card relative w-full flex items-center justify-center bg-black cursor-pointer" data-id="v25" onclick="handleVideoClick('v25')">
+        <div class="video-overlay"></div>
+        <iframe id="iframe-v25" class="w-full h-full object-cover pointer-events-none" src="https://www.youtube.com/embed/SW1_7cgIP8g?enablejsapi=1&autoplay=0&mute=0&loop=1&playlist=SW1_7cgIP8g&controls=0&rel=0&modestbranding=1&showinfo=0" frameborder="0" allow="autoplay; encrypted-media"></iframe>
+        <div class="absolute right-3 bottom-32 flex flex-col items-center gap-5 z-20">
+            <button onclick="toggleLike('v25', event)" class="flex flex-col items-center gap-1 bg-black/40 p-2.5 rounded-full backdrop-blur-sm border border-white/10"><svg id="like-icon-v25" class="w-6 h-6 text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg><span id="like-count-v25" class="text-[11px] font-bold">0</span></button>
+            <button onclick="openComments('v25', event)" class="flex flex-col items-center gap-1 bg-black/40 p-2.5 rounded-full backdrop-blur-sm border border-white/10"><svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg><span id="comment-count-v25" class="text-[11px] font-bold">0</span></button>
+        </div>
+        <div class="absolute bottom-5 left-5 right-20 z-10 bg-black/60 p-4 rounded-xl backdrop-blur-sm border border-white/10 shadow-lg">
+            <p class="text-xs mt-1 text-gray-200">Sixseven #sixseven</p>
+        </div>
+    </div>
+
+    <div id="comment-drawer" class="absolute bottom-0 left-0 right-0 h-[60vh] bg-zinc-900 border-t border-zinc-800 rounded-t-2xl z-30 transform translate-y-full drawer-transition flex flex-col shadow-2xl">
+        <div class="flex items-center justify-between px-4 py-3 border-b border-zinc-800">
+            <span id="drawer-title" class="font-bold text-sm text-zinc-300">Commentaires (0)</span>
+            <button onclick="closeComments()" class="text-zinc-500 hover:text-white text-xs bg-zinc-800 px-2.5 py-1 rounded-md transition-colors">Fermer</button>
+        </div>
+        
+        <div id="comments-list" class="flex-1 overflow-y-auto p-4 flex flex-col gap-3 select-text"></div>
+        
+        <div class="p-4 border-t border-zinc-800 bg-zinc-900/90 flex flex-col gap-2">
+            <div class="flex items-center gap-2">
+                <span class="text-xs font-semibold text-zinc-400">Votre pseudo :</span>
+                <input id="comment-author-input" type="text" placeholder="@Pseudo" class="bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-1 text-xs text-zinc-100 focus:outline-none focus:border-red-500 w-40" />
+            </div>
+            
+            <div class="flex gap-2">
+                <input id="comment-input" type="text" placeholder="Ajouter un commentaire..." class="flex-1 bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-2.5 text-xs text-zinc-100 focus:outline-none focus:border-red-500" onkeydown="if(event.key === 'Enter') submitComment()"/>
+                <button onclick="submitComment()" class="bg-red-500 hover:bg-red-600 text-white rounded-xl px-4 text-xs font-bold transition-colors">Publier</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+   <!-- Bannière d'installation PWA (Masquée par défaut avec 'hidden') -->
+    <div id="pwa-install-banner" class="hidden fixed bottom-4 left-4 right-4 max-w-md mx-auto bg-zinc-900 border border-zinc-800 rounded-2xl p-4 shadow-2xl z-50 animate-fade-in flex items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+            <img src="logo.png" alt="Logo" class="w-10 h-10 rounded-xl object-cover border border-white/10">
+            <div>
+                <h3 class="text-xs font-bold text-white">Installer l'application</h3>
+                <p class="text-[11px] text-zinc-400">Ajoutez-la sur votre écran pour y accéder plus facilement.</p>
+            </div>
+        </div>
+        <div class="flex gap-2 shrink-0">
+            <button onclick="dismissInstallBanner()" class="bg-zinc-800 hover:bg-zinc-700 text-zinc-400 text-[11px] font-semibold px-3 py-2 rounded-xl transition-colors">Plus tard</button>
+            <button onclick="triggerInstallPWA()" class="bg-red-500 hover:bg-red-600 text-white text-[11px] font-bold px-3 py-2 rounded-xl transition-colors">Installer</button>
+        </div>
+    </div>
+
+    <script>
+        // --- Enregistrement du Service Worker ---
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(reg => console.log('Service Worker enregistré !', reg.scope))
+                    .catch(err => console.warn('Échec enregistrement SW :', err));
+            });
+        }
+
+        // --- Logique de la bannière d'installation ---
+        let deferredPrompt = null;
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // Empêche le navigateur d'afficher sa propre bannière par défaut immédiatement
+            e.preventDefault();
+            // Stocke l'événement pour pouvoir le déclencher plus tard au clic
+            deferredPrompt = e;
+            
+            // Si l'utilisateur n'a pas déjà refusé l'installation récemment, on affiche notre bannière
+            if (!localStorage.getItem('pwa-dismissed')) {
+                const banner = document.getElementById('pwa-install-banner');
+                if (banner) banner.classList.remove('hidden');
+            }
+        });
+
+        function triggerInstallPWA() {
+            const banner = document.getElementById('pwa-install-banner');
+            if (!deferredPrompt) return;
+            
+            // Affiche la boîte de dialogue d'installation native
+            deferredPrompt.prompt();
+            
+            // Attend la réponse de l'utilisateur
+            deferredPrompt.userChoice.then((choiceResult) => {
+                if (choiceResult.outcome === 'accepted') {
+                    console.log('L\'utilisateur a installé la PWA');
+                } else {
+                    console.log('L\'utilisateur a refusé l\'installation');
+                }
+                // On réinitialise la variable, l'événement ne sert plus
+                deferredPrompt = null;
+                if (banner) banner.classList.add('hidden');
+            });
+        }
+
+        function dismissInstallBanner() {
+            const banner = document.getElementById('pwa-install-banner');
+            if (banner) banner.classList.add('hidden');
+            // Optionnel : ne plus l'embêter pendant cette session ou définitivement
+            localStorage.setItem('pwa-dismissed', 'true');
+        }
+
+        // --- Reste de ton code de gestion des vidéos et commentaires ---
+        let currentVideoId = null;
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const savedPseudo = localStorage.getItem('user-pseudo');
+            if (savedPseudo) {
+                document.getElementById('comment-author-input').value = savedPseudo;
+            }
+        });
+
+        function handleVideoClick(videoId) {
+            console.log("Clic sur la vidéo :", videoId);
+        }
+
+        function toggleLike(videoId, event) {
+            if (event) event.stopPropagation();
+            const icon = document.getElementById(`like-icon-${videoId}`);
+            const countEl = document.getElementById(`like-count-${videoId}`);
+            if (!icon || !countEl) return;
+
+            let count = parseInt(countEl.innerText) || 0;
+            if (icon.classList.contains('like-active')) {
+                icon.classList.remove('like-active');
+                countEl.innerText = count - 1;
+            } else {
+                icon.classList.add('like-active');
+                countEl.innerText = count + 1;
+            }
+        }
+
+        function openComments(videoId, event) {
+            if (event) event.stopPropagation();
+            currentVideoId = videoId;
+            const drawer = document.getElementById('comment-drawer');
+            if (drawer) {
+                drawer.classList.remove('translate-y-full');
+                loadComments(videoId);
+            }
+        }
+
+        function closeComments() {
+            const drawer = document.getElementById('comment-drawer');
+            if (drawer) {
+                drawer.classList.add('translate-y-full');
+            }
+            currentVideoId = null;
+        }
+
+        function submitComment() {
+            if (!currentVideoId) return;
+            const input = document.getElementById('comment-input');
+            const authorInput = document.getElementById('comment-author-input');
+            
+            let text = input.value.trim();
+            let author = authorInput.value.trim();
+
+            if (!text) return;
+
+            if (!author) {
+                author = "Anonyme";
+            } else {
+                if (author.startsWith('@')) author = author.substring(1);
+            }
+
+            localStorage.setItem('user-pseudo', author);
+
+            const comments = JSON.parse(localStorage.getItem(`comments-${currentVideoId}`)) || [];
+            comments.push({ author: author, text: text });
+            localStorage.setItem(`comments-${currentVideoId}`, JSON.stringify(comments));
+
+            input.value = "";
+            loadComments(currentVideoId);
+            updateCommentCountDisplay(currentVideoId);
+        }
+
+        function loadComments(videoId) {
+            const listContainer = document.getElementById('comments-list');
+            const comments = JSON.parse(localStorage.getItem(`comments-${videoId}`)) || [];
+            document.getElementById('drawer-title').innerText = `Commentaires (${comments.length})`;
+            listContainer.innerHTML = "";
+
+            if (comments.length === 0) {
+                listContainer.innerHTML = `<p class="text-center text-zinc-500 py-4 text-xs">Soyez le premier à commenter !</p>`;
+                return;
+            }
+
+            comments.forEach(c => {
+                const item = document.createElement('div');
+                item.className = "flex gap-2 pb-2 border-b border-zinc-800 animate-fade-in";
+                item.innerHTML = `<div><span class="font-bold text-red-400 text-xs">@${c.author}</span>: <span class="text-zinc-200 text-xs">${c.text}</span></div>`;
+                listContainer.appendChild(item);
+            });
+        }
+
+        function updateCommentCountDisplay(videoId) {
+            const el = document.getElementById(`comment-count-${videoId}`);
+            if (el) {
+                const comments = JSON.parse(localStorage.getItem(`comments-${videoId}`)) || [];
+                el.innerText = comments.length;
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            for (let i = 1; i <= 25; i++) {
+                updateCommentCountDisplay(`v${i}`);
+            }
+        });
+
+        window.handleVideoClick = handleVideoClick;
+        window.toggleLike = toggleLike;
+        window.openComments = openComments;
+        window.closeComments = closeComments;
+        window.submitComment = submitComment;
+    </script>
+</body>
+</html>
